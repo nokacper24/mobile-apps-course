@@ -1,4 +1,4 @@
-# project2
+# Dice roller
 
 A new Flutter project.
 

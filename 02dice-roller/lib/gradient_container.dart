@@ -9,8 +9,6 @@ class GradientContainer extends StatelessWidget {
     required this.colors,
   });
 
-
-
   @override
   Widget build(BuildContext context) {
     return Container(
