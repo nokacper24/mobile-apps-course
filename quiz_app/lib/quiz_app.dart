@@ -21,32 +21,38 @@ class _QuizAppState extends State<QuizApp> {
   @override
   void initState() {
     super.initState();
-    currentScreen = StartScreen(startQuiz: switchScreen);
+    currentScreen = StartScreen(startQuiz: startQuiz);
   }
 
   void addAnswer(String selectedAnswer) {
     selectedAnswers.add(selectedAnswer);
     if (selectedAnswers.length >= questions.length) {
-      setState(() {
-        currentScreen = ResultsScreen(
-          chosenAnswers: selectedAnswers,
-          resetFunction: resetQuiz,
-        );
-      });
+      switchScreen(ResultsScreen(
+        chosenAnswers: selectedAnswers,
+        onReset: resetQuiz,
+        onHome: resetAndHome,
+      ));
     }
+  }
+
+  void switchScreen(Widget screen) {
+    setState(() {
+      currentScreen = screen;
+    });
   }
 
   void resetQuiz() {
     selectedAnswers.clear();
-    switchScreen();
+    switchScreen(QuestionScreen(onSelectAnswer: addAnswer));
   }
 
-  void switchScreen() {
-    setState(() {
-      currentScreen = QuestionScreen(
-        onSelectAnswer: addAnswer,
-      );
-    });
+  void resetAndHome() {
+    selectedAnswers.clear();
+    switchScreen(StartScreen(startQuiz: startQuiz));
+  }
+
+  void startQuiz() {
+    switchScreen(QuestionScreen(onSelectAnswer: addAnswer));
   }
 
   @override
