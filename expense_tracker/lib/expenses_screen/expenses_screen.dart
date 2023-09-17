@@ -1,3 +1,4 @@
+import 'package:expense_tracker/expenses_screen/chart/chart.dart';
 import 'package:expense_tracker/expenses_screen/expenses_list/expenses_list.dart';
 import 'package:expense_tracker/expenses_screen/expenses_list/new_expense.dart';
 import 'package:expense_tracker/models/expense.dart';
@@ -13,20 +14,7 @@ class ExpensesScreen extends StatefulWidget {
 }
 
 class _ExpensesScreenState extends State<ExpensesScreen> {
-  final List<Expense> _registeredExpenses = [
-    Expense(
-      title: 'Restaurant',
-      category: Category.food,
-      amound: 120,
-      date: DateTime.now(),
-    ),
-    Expense(
-      title: 'Cinema',
-      category: Category.leasure,
-      amound: 20,
-      date: DateTime.now(),
-    ),
-  ];
+  final List<Expense> _registeredExpenses = sampleExpenses;
 
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
@@ -79,7 +67,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
       body: _registeredExpenses.isNotEmpty
           ? Column(
               children: [
-                const Text('graphs'),
+                Chart(expenses: _registeredExpenses),
                 Expanded(
                     child: ExpensesList(
                   expenses: _registeredExpenses,
