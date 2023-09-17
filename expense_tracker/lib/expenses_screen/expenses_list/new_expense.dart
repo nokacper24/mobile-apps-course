@@ -1,5 +1,4 @@
 import 'package:expense_tracker/models/expense.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NewExpense extends StatefulWidget {
@@ -17,7 +16,7 @@ class _NewExpenseState extends State<NewExpense> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
   DateTime selectedDate = DateTime.now();
-  Category selectedCategory = Category.leisure;
+  Category selectedCategory = Category.food;
 
   @override
   void dispose() {
