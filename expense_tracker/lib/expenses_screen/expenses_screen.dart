@@ -18,6 +18,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
 
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
+      useSafeArea: true,
       isScrollControlled: true,
       context: context,
       builder: (ctx) => NewExpense(
@@ -54,7 +55,18 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+
+    final mainContent = _registeredExpenses.isNotEmpty
+        ? ExpensesList(
+            expenses: _registeredExpenses,
+            onRemoveExpense: _removeExpense,
+          )
+        : const Center(child: Text('No expenses found. Start adding some!'));
+
     return Scaffold(
+      resizeToAvoidBottomInset:
+          false, // fixes chart being moved  by keyboard and overflowing
       appBar: AppBar(
         title: const Text('Expense Tracker'),
         actions: [
@@ -64,18 +76,27 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
           )
         ],
       ),
-      body: _registeredExpenses.isNotEmpty
+      body: width < 600
           ? Column(
               children: [
                 Chart(expenses: _registeredExpenses),
                 Expanded(
-                    child: ExpensesList(
-                  expenses: _registeredExpenses,
-                  onRemoveExpense: _removeExpense,
-                )),
+                  child: mainContent,
+                ),
               ],
             )
-          : const Center(child: Text('No expenses found. Start adding some!')),
+          : Row(
+              children: [
+                Expanded(
+                  child: Chart(
+                    expenses: _registeredExpenses,
+                  ),
+                ),
+                Expanded(
+                  child: mainContent,
+                ),
+              ],
+            ),
     );
   }
 }
