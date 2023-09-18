@@ -53,6 +53,27 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
     ));
   }
 
+  void _updateExpense(
+      {required Expense oldExpense, required Expense updatedExpense}) {
+    setState(() {
+      _registeredExpenses[_registeredExpenses.indexOf(oldExpense)] =
+          updatedExpense;
+    });
+  }
+
+  void _openUpdateExpenseOverlay({required Expense expenseToUpdate}) {
+    showModalBottomSheet(
+      useSafeArea: true,
+      isScrollControlled: true,
+      context: context,
+      builder: (ctx) => NewExpense.update(
+        onUpdateExpense: _updateExpense,
+        expenseToUpdate: expenseToUpdate,
+      ),
+    );
+    //
+  }
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
@@ -61,6 +82,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
         ? ExpensesList(
             expenses: _registeredExpenses,
             onRemoveExpense: _removeExpense,
+            onUpdateExpense: _openUpdateExpenseOverlay,
           )
         : const Center(child: Text('No expenses found. Start adding some!'));
 

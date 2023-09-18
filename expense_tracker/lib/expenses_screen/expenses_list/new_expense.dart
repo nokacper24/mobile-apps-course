@@ -2,9 +2,24 @@ import 'package:expense_tracker/models/expense.dart';
 import 'package:flutter/material.dart';
 
 class NewExpense extends StatefulWidget {
-  const NewExpense({super.key, required this.onAddExpense});
+  // Create new expense
+  const NewExpense({
+    super.key,
+    required this.onAddExpense,
+  })  : onUpdateExpense = null,
+        expenseToUpdate = null;
 
-  final Function(Expense) onAddExpense;
+  // Update an existing expense
+  const NewExpense.update(
+      {super.key, required this.onUpdateExpense, required this.expenseToUpdate})
+      : onAddExpense = null;
+
+  final Function(Expense)? onAddExpense;
+
+  final Function(
+      {required Expense oldExpense,
+      required Expense updatedExpense})? onUpdateExpense;
+  final Expense? expenseToUpdate;
 
   @override
   State<NewExpense> createState() {
@@ -66,8 +81,28 @@ class _NewExpenseState extends State<NewExpense> {
           category: selectedCategory,
           amount: amount,
           date: selectedDate);
-      widget.onAddExpense(newExpense);
+      Expense? expenseToUpdate = widget.expenseToUpdate;
+
+      if (expenseToUpdate != null) {
+        widget.onUpdateExpense!(
+            oldExpense: expenseToUpdate, updatedExpense: newExpense);
+      } else {
+        widget.onAddExpense!(newExpense);
+      }
       Navigator.pop(context);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    Expense? expenseToUpdate = widget.expenseToUpdate;
+    if (expenseToUpdate != null) {
+      _amountController.text = expenseToUpdate.amount.toString();
+      _titleController.text = expenseToUpdate.title;
+      selectedCategory = expenseToUpdate.category;
+      selectedDate = expenseToUpdate.date;
     }
   }
 
@@ -142,7 +177,7 @@ class _NewExpenseState extends State<NewExpense> {
                             );
                           },
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 24,
                         ),
                         Expanded(
