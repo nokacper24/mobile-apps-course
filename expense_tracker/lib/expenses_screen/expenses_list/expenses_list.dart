@@ -20,6 +20,10 @@ class ExpensesList extends StatelessWidget {
     return ListView.builder(
       itemCount: expenses.length,
       itemBuilder: (context, index) => Dismissible(
+        dismissThresholds: const {
+          DismissDirection.endToStart: 0.4,
+          DismissDirection.startToEnd: 0.2,
+        },
         key: ValueKey(expenses[index]),
         background: Container(
           color: Theme.of(context).colorScheme.primary.withOpacity(0.75),
