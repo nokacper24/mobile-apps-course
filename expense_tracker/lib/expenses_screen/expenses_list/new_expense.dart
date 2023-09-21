@@ -114,6 +114,62 @@ class _NewExpenseState extends State<NewExpense> {
       builder: (context, constraints) {
         final width = constraints.maxWidth;
 
+        var cancelButton = TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: const Text('Cancel'));
+
+        var saveExpenseButton = ElevatedButton(
+            onPressed: _submitExpenceData, child: const Text('Save Expense'));
+
+        var titleTextField = TextField(
+          maxLength: 50,
+          keyboardType: TextInputType.text,
+          controller: _titleController,
+          decoration: const InputDecoration(label: Text('Title')),
+        );
+
+        var amountTextField = TextField(
+            keyboardType: TextInputType.number,
+            controller: _amountController,
+            decoration:
+                const InputDecoration(label: Text('Amount'), prefixText: '\$'));
+
+        var dropdownCategorySelectionButton = DropdownButton(
+          value: selectedCategory,
+          items: Category.values
+              .map((item) => DropdownMenuItem(
+                  value: item,
+                  child: Text(
+                    item.name.toUpperCase(),
+                  )))
+              .toList(),
+          onChanged: (value) {
+            if (value == null) {
+              return;
+            }
+            setState(
+              () {
+                selectedCategory = value;
+              },
+            );
+          },
+        );
+
+        var datePickerRow = Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Text(formatter.format(selectedDate)),
+            IconButton(
+              onPressed: _presentDatePicker,
+              icon: const Icon(
+                Icons.calendar_month,
+              ),
+            ),
+          ],
+        );
+
         return SizedBox(
           height: double.infinity,
           child: SingleChildScrollView(
@@ -121,162 +177,51 @@ class _NewExpenseState extends State<NewExpense> {
               padding: EdgeInsets.fromLTRB(16, 16, 16, keyboardSpace + 16),
               child: Column(
                 children: [
-                  if (width >= 600)
+                  if (width >= 600) // Large or landscape
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Expanded(
-                          child: TextField(
-                            maxLength: 50,
-                            keyboardType: TextInputType.text,
-                            controller: _titleController,
-                            decoration:
-                                const InputDecoration(label: Text('Title')),
-                          ),
-                        ),
+                        Expanded(child: titleTextField),
                         const SizedBox(width: 24),
-                        Expanded(
-                          child: TextField(
-                            keyboardType: TextInputType.number,
-                            controller: _amountController,
-                            decoration: const InputDecoration(
-                                label: Text('Amount'), prefixText: '\$'),
-                          ),
-                        ),
+                        Expanded(child: amountTextField),
                       ],
                     )
-                  else
-                    TextField(
-                      maxLength: 50,
-                      keyboardType: TextInputType.text,
-                      controller: _titleController,
-                      decoration: const InputDecoration(
-                        label: Text('Title'),
-                      ),
-                    ),
-                  if (width >= 600)
+                  else // Portrait
+                    titleTextField,
+                  if (width >= 600) // Large or landscape
                     Row(
                       children: [
-                        DropdownButton(
-                          value: selectedCategory,
-                          items: Category.values
-                              .map((item) => DropdownMenuItem(
-                                  value: item,
-                                  child: Text(
-                                    item.name.toUpperCase(),
-                                  )))
-                              .toList(),
-                          onChanged: (value) {
-                            if (value == null) {
-                              return;
-                            }
-                            setState(
-                              () {
-                                selectedCategory = value;
-                              },
-                            );
-                          },
-                        ),
-                        const SizedBox(
-                          width: 24,
-                        ),
-                        Expanded(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(formatter.format(selectedDate)),
-                              IconButton(
-                                onPressed: _presentDatePicker,
-                                icon: const Icon(
-                                  Icons.calendar_month,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
+                        dropdownCategorySelectionButton,
+                        const SizedBox(width: 24),
+                        Expanded(child: datePickerRow)
                       ],
                     )
-                  else
+                  else // Portrait
                     Row(
                       children: [
-                        Expanded(
-                          child: TextField(
-                            keyboardType: TextInputType.number,
-                            controller: _amountController,
-                            decoration: const InputDecoration(
-                                label: Text('Amount'), prefixText: '\$'),
-                          ),
-                        ),
+                        Expanded(child: amountTextField),
                         const SizedBox(width: 16),
-                        Expanded(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Text(formatter.format(selectedDate)),
-                              IconButton(
-                                onPressed: _presentDatePicker,
-                                icon: const Icon(
-                                  Icons.calendar_month,
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
+                        Expanded(child: datePickerRow)
                       ],
                     ),
                   const SizedBox(
                     height: 16,
                   ),
-                  if (width >= 600)
+                  if (width >= 600) // Large or landscape
                     Row(
                       children: [
                         const Spacer(),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Cancel'),
-                        ),
-                        ElevatedButton(
-                          onPressed: _submitExpenceData,
-                          child: const Text('Save Expense'),
-                        ),
+                        cancelButton,
+                        saveExpenseButton,
                       ],
                     )
-                  else
+                  else // Portrait
                     Row(
                       children: [
-                        DropdownButton(
-                          value: selectedCategory,
-                          items: Category.values
-                              .map((item) => DropdownMenuItem(
-                                  value: item,
-                                  child: Text(
-                                    item.name.toUpperCase(),
-                                  )))
-                              .toList(),
-                          onChanged: (value) {
-                            if (value == null) {
-                              return;
-                            }
-                            setState(
-                              () {
-                                selectedCategory = value;
-                              },
-                            );
-                          },
-                        ),
+                        dropdownCategorySelectionButton,
                         const Spacer(),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Cancel'),
-                        ),
-                        ElevatedButton(
-                          onPressed: _submitExpenceData,
-                          child: const Text('Save Expense'),
-                        ),
+                        cancelButton,
+                        saveExpenseButton,
                       ],
                     )
                 ],
