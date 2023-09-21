@@ -1,15 +1,21 @@
 import 'package:expense_tracker/models/expense.dart';
 import 'package:flutter/material.dart';
 
+/// A form to add a new expense or update an existing one.
 class NewExpense extends StatefulWidget {
-  // Create new expense
+  /// Creates a new expense.
+  ///
+  /// [onAddExpense] will be called when the user submits the form.
   const NewExpense({
     super.key,
     required this.onAddExpense,
   })  : onUpdateExpense = null,
         expenseToUpdate = null;
 
-  // Update an existing expense
+  /// Updates an existing expense.
+  ///
+  /// [expenseToUpdate] will be used to fill the form fields.
+  /// [onUpdateExpense] will be called when the user submits the form.
   const NewExpense.update(
       {super.key, required this.onUpdateExpense, required this.expenseToUpdate})
       : onAddExpense = null;
@@ -30,16 +36,19 @@ class NewExpense extends StatefulWidget {
 class _NewExpenseState extends State<NewExpense> {
   final _titleController = TextEditingController();
   final _amountController = TextEditingController();
-  DateTime selectedDate = DateTime.now();
+  DateTime selectedDate = DateTime.now(); // Default to today
   Category selectedCategory = Category.food;
 
   @override
   void dispose() {
+    // Clean up the controller when the widget is disposed.
     _titleController.dispose();
     _amountController.dispose();
     super.dispose();
   }
 
+  /// Opens a date picker to select a date.
+  /// calls [setState] to update [selectedDate].
   void _presentDatePicker() async {
     final now = DateTime.now();
     final firstDate = DateTime(now.year - 1, now.month, now.day);
@@ -50,10 +59,12 @@ class _NewExpenseState extends State<NewExpense> {
         firstDate: firstDate,
         lastDate: lastDate);
     setState(() {
-      selectedDate = date ?? selectedDate;
+      selectedDate = date ?? selectedDate; // Keep the same date if null
     });
   }
 
+  /// Validates the form and calls [onAddExpense] or [onUpdateExpense].
+  /// If the form is invalid, displays an alert dialog.
   void _submitExpenceData() {
     final double? amount = double.tryParse(_amountController.text);
     if (_titleController.text.trim().isEmpty || amount == null || amount <= 0) {
@@ -110,66 +121,67 @@ class _NewExpenseState extends State<NewExpense> {
   Widget build(BuildContext context) {
     final keyboardSpace = MediaQuery.of(context).viewInsets.bottom;
 
+    // Reusable  widgets extracted for readability and no duplication
+    var cancelButton = TextButton(
+        onPressed: () {
+          Navigator.pop(context);
+        },
+        child: const Text('Cancel'));
+
+    var saveExpenseButton = ElevatedButton(
+        onPressed: _submitExpenceData, child: const Text('Save Expense'));
+
+    var titleTextField = TextField(
+      maxLength: 50,
+      keyboardType: TextInputType.text,
+      controller: _titleController,
+      decoration: const InputDecoration(label: Text('Title')),
+    );
+
+    var amountTextField = TextField(
+        keyboardType: TextInputType.number,
+        controller: _amountController,
+        decoration:
+            const InputDecoration(label: Text('Amount'), prefixText: '\$'));
+
+    var dropdownCategorySelectionButton = DropdownButton(
+      value: selectedCategory,
+      items: Category.values
+          .map((item) => DropdownMenuItem(
+              value: item,
+              child: Text(
+                item.name.toUpperCase(),
+              )))
+          .toList(),
+      onChanged: (value) {
+        if (value == null) {
+          return;
+        }
+        setState(
+          () {
+            selectedCategory = value;
+          },
+        );
+      },
+    );
+
+    var datePickerRow = Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Text(formatter.format(selectedDate)),
+        IconButton(
+          onPressed: _presentDatePicker,
+          icon: const Icon(
+            Icons.calendar_month,
+          ),
+        ),
+      ],
+    );
+
+    // LayoutBuilder used to change layout based on screen size
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth;
-
-        var cancelButton = TextButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: const Text('Cancel'));
-
-        var saveExpenseButton = ElevatedButton(
-            onPressed: _submitExpenceData, child: const Text('Save Expense'));
-
-        var titleTextField = TextField(
-          maxLength: 50,
-          keyboardType: TextInputType.text,
-          controller: _titleController,
-          decoration: const InputDecoration(label: Text('Title')),
-        );
-
-        var amountTextField = TextField(
-            keyboardType: TextInputType.number,
-            controller: _amountController,
-            decoration:
-                const InputDecoration(label: Text('Amount'), prefixText: '\$'));
-
-        var dropdownCategorySelectionButton = DropdownButton(
-          value: selectedCategory,
-          items: Category.values
-              .map((item) => DropdownMenuItem(
-                  value: item,
-                  child: Text(
-                    item.name.toUpperCase(),
-                  )))
-              .toList(),
-          onChanged: (value) {
-            if (value == null) {
-              return;
-            }
-            setState(
-              () {
-                selectedCategory = value;
-              },
-            );
-          },
-        );
-
-        var datePickerRow = Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Text(formatter.format(selectedDate)),
-            IconButton(
-              onPressed: _presentDatePicker,
-              icon: const Icon(
-                Icons.calendar_month,
-              ),
-            ),
-          ],
-        );
-
         return SizedBox(
           height: double.infinity,
           child: SingleChildScrollView(

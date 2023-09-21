@@ -4,6 +4,8 @@ import 'package:expense_tracker/expenses_screen/expenses_list/new_expense.dart';
 import 'package:expense_tracker/models/expense.dart';
 import 'package:flutter/material.dart';
 
+/// The main screen of the application.
+/// Displays a list of expenses and a chart.
 class ExpensesScreen extends StatefulWidget {
   const ExpensesScreen({super.key});
 
@@ -16,6 +18,7 @@ class ExpensesScreen extends StatefulWidget {
 class _ExpensesScreenState extends State<ExpensesScreen> {
   final List<Expense> _registeredExpenses = sampleExpenses;
 
+  /// Opens the overlay to add a new expense.
   void _openAddExpenseOverlay() {
     showModalBottomSheet(
       useSafeArea: true,
@@ -27,12 +30,19 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
     );
   }
 
+  /// Adds a new expense to the list of registered expenses.
+  ///
+  /// [expense] will be added to [_registeredExpenses].
   void _addNewExpense(Expense expense) {
     setState(() {
       _registeredExpenses.add(expense);
     });
   }
 
+  /// Removes an expense from the list of registered expenses.
+  /// Displays a snackbar to undo the deletion.
+  ///
+  /// [expense] will be removed from [_registeredExpenses].
   void _removeExpense(Expense expense) {
     final expenseIndex = _registeredExpenses.indexOf(expense);
     setState(() {
@@ -53,6 +63,9 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
     ));
   }
 
+  /// Updates an expense in the list of registered expenses.
+  ///
+  /// [oldExpense] will be replaced by [updatedExpense] in [_registeredExpenses].
   void _updateExpense(
       {required Expense oldExpense, required Expense updatedExpense}) {
     setState(() {
@@ -61,6 +74,9 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
     });
   }
 
+  /// Opens the overlay to update an existing expense.
+  ///
+  /// [expenseToUpdate] is the expense that will be updated.
   void _openUpdateExpenseOverlay({required Expense expenseToUpdate}) {
     showModalBottomSheet(
       useSafeArea: true,
@@ -88,7 +104,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
 
     return Scaffold(
       resizeToAvoidBottomInset:
-          false, // fixes chart being moved  by keyboard and overflowing
+          false, // fixes chart being moved by keyboard and overflowing
       appBar: AppBar(
         title: const Text('Expense Tracker'),
         actions: [
@@ -98,7 +114,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
           )
         ],
       ),
-      body: width < 600
+      body: width < 600 // landscape mode
           ? Column(
               children: [
                 Chart(expenses: _registeredExpenses),
@@ -106,7 +122,7 @@ class _ExpensesScreenState extends State<ExpensesScreen> {
                   child: mainContent,
                 ),
               ],
-            )
+            ) // portrait mode
           : Row(
               children: [
                 Expanded(

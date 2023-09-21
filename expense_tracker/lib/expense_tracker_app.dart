@@ -1,16 +1,20 @@
 import 'package:expense_tracker/expenses_screen/expenses_screen.dart';
 import 'package:flutter/material.dart';
 
+/// color scheme for the app
 final kColorScheme = ColorScheme.fromSeed(
   seedColor: const Color.fromARGB(255, 95, 60, 180),
 );
 
+/// dark color scheme for the app
 final kDarkColorScheme = ColorScheme.fromSeed(
   brightness: Brightness.dark,
   seedColor: const Color.fromARGB(255, 5, 100, 125),
 );
 
+/// The main ExpenseTrackerApplication widget
 class ExpenseTrackerApp extends StatelessWidget {
+  /// Creates an ExpenseTrackerApplication widget
   const ExpenseTrackerApp({super.key});
 
   @override

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+/// Code taken from Udemy tutorial, not written by me.
 class ChartBar extends StatelessWidget {
   const ChartBar({
     super.key,
