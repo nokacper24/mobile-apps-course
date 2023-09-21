@@ -81,8 +81,8 @@ class _NewExpenseState extends State<NewExpense> {
           category: selectedCategory,
           amount: amount,
           date: selectedDate);
-      Expense? expenseToUpdate = widget.expenseToUpdate;
 
+      Expense? expenseToUpdate = widget.expenseToUpdate;
       if (expenseToUpdate != null) {
         widget.onUpdateExpense!(
             oldExpense: expenseToUpdate, updatedExpense: newExpense);
@@ -96,7 +96,7 @@ class _NewExpenseState extends State<NewExpense> {
   @override
   void initState() {
     super.initState();
-
+    // Fill fields with details of existinf expense if provided
     Expense? expenseToUpdate = widget.expenseToUpdate;
     if (expenseToUpdate != null) {
       _amountController.text = expenseToUpdate.amount.toString();
@@ -178,6 +178,7 @@ class _NewExpenseState extends State<NewExpense> {
               child: Column(
                 children: [
                   if (width >= 600) // Large or landscape
+                    ...[
                     Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -185,18 +186,24 @@ class _NewExpenseState extends State<NewExpense> {
                         const SizedBox(width: 24),
                         Expanded(child: amountTextField),
                       ],
-                    )
-                  else // Portrait
-                    titleTextField,
-                  if (width >= 600) // Large or landscape
+                    ),
                     Row(
                       children: [
                         dropdownCategorySelectionButton,
-                        const SizedBox(width: 24),
                         Expanded(child: datePickerRow)
                       ],
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        const Spacer(),
+                        cancelButton,
+                        saveExpenseButton,
+                      ],
                     )
-                  else // Portrait
+                  ] else // Portrait
+                    ...[
+                    titleTextField,
                     Row(
                       children: [
                         Expanded(child: amountTextField),
@@ -204,18 +211,7 @@ class _NewExpenseState extends State<NewExpense> {
                         Expanded(child: datePickerRow)
                       ],
                     ),
-                  const SizedBox(
-                    height: 16,
-                  ),
-                  if (width >= 600) // Large or landscape
-                    Row(
-                      children: [
-                        const Spacer(),
-                        cancelButton,
-                        saveExpenseButton,
-                      ],
-                    )
-                  else // Portrait
+                    const SizedBox(height: 16),
                     Row(
                       children: [
                         dropdownCategorySelectionButton,
@@ -224,6 +220,7 @@ class _NewExpenseState extends State<NewExpense> {
                         saveExpenseButton,
                       ],
                     )
+                  ],
                 ],
               ),
             ),
