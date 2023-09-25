@@ -27,30 +27,11 @@ class ExpensesList extends StatelessWidget {
       itemCount: expenses.length,
       itemBuilder: (context, index) {
         var expenseItem = ExpenseItem(expense: expenses[index]);
-        return Stack(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                DismissableCardBackground(
-                  // Edit background
-                  backgroundColor:
-                      Theme.of(context).colorScheme.primary.withOpacity(0.75),
-                  icon: Icons.draw,
-                  iconAlignment: Alignment.centerLeft,
-                  height: 82,
-                ),
-                DismissableCardBackground(
-                  // Delete background
-                  backgroundColor:
-                      Theme.of(context).colorScheme.error.withOpacity(0.75),
-                  icon: Icons.delete,
-                  iconAlignment: Alignment.centerRight,
-                  height: 82,
-                )
-              ],
-            ),
-            Dismissible(
+        return Container(
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(15),
+            child: Dismissible(
                 key: ValueKey(expenses[index]),
                 confirmDismiss: (direction) {
                   if (direction == DismissDirection.endToStart) {
@@ -75,8 +56,24 @@ class ExpensesList extends StatelessWidget {
                   DismissDirection.startToEnd:
                       0.2, // smaller threshold for update
                 },
+                background: DismissableCardBackground(
+                  // Edit background
+                  backgroundColor:
+                      Theme.of(context).colorScheme.primary.withOpacity(0.75),
+                  icon: Icons.draw,
+                  direction: DismissDirection.startToEnd,
+                  height: 82,
+                ),
+                secondaryBackground: DismissableCardBackground(
+                  // Delete background
+                  backgroundColor:
+                      Theme.of(context).colorScheme.error.withOpacity(0.75),
+                  icon: Icons.delete,
+                  direction: DismissDirection.endToStart,
+                  height: 82,
+                ),
                 child: expenseItem),
-          ],
+          ),
         );
       },
     );
@@ -94,25 +91,24 @@ class DismissableCardBackground extends StatelessWidget {
       {super.key,
       required this.icon,
       required this.backgroundColor,
-      required this.iconAlignment,
+      required this.direction,
       required this.height});
   final IconData icon;
   final Color backgroundColor;
-  final Alignment iconAlignment;
+  final DismissDirection direction;
   final double height;
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Card(
-        color: backgroundColor,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
-          height: height,
-          alignment: iconAlignment,
-          child: Icon(icon),
-        ),
-      ),
+    var iconAlignment = direction == DismissDirection.startToEnd
+        ? Alignment.centerLeft
+        : Alignment.centerRight;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10),
+      height: height,
+      color: backgroundColor,
+      alignment: iconAlignment,
+      child: Icon(icon),
     );
   }
 }
