@@ -33,7 +33,7 @@ User Interface:
 - Save Button: Saves the entered expense.
 - Cancel Button: Cancels the expense entry.
 
-## File and folder structure?
+## File and folder structure
 `main.dart` is the entry point of the application. it calls Flutter's  `runApp` and passes `ExpsnesTrackerApp` as argument.  
 `expense_tracker_app.dart` contains `ExpenseTrackerApp`, which has the `MaterialApp`, it takes care of the themes and general settings, and finally it shows the `ExpensesScreen`.  
 `ExpensesScreen` is located in `expense_screen.dart`.  It is responsible for expenses data, as well as displaying the chart (located in the chart folder, files are taken directly from Udemy course) and `ExpensesList`, which is located in `expenses_list.dart`.
