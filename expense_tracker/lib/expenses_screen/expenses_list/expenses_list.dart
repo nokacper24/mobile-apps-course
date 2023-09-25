@@ -26,55 +26,93 @@ class ExpensesList extends StatelessWidget {
     return ListView.builder(
       itemCount: expenses.length,
       itemBuilder: (context, index) {
-        var background = Container(
-          color: Theme.of(context).colorScheme.primary.withOpacity(0.75),
-          margin: EdgeInsets.symmetric(
-            horizontal: Theme.of(context).cardTheme.margin!.horizontal,
-          ),
-          padding: const EdgeInsets.only(left: 5),
-          alignment: Alignment.centerLeft,
-          child: const Icon(Icons.draw),
-        );
-
-        var secondaryBackground = Container(
-          color: Theme.of(context).colorScheme.error.withOpacity(0.75),
-          margin: EdgeInsets.symmetric(
-            horizontal: Theme.of(context).cardTheme.margin!.horizontal,
-          ),
-          padding: const EdgeInsets.only(right: 5),
-          alignment: Alignment.centerRight,
-          child: const Icon(Icons.delete),
-        );
-
-        return Dismissible(
-          dismissThresholds: const {
-            DismissDirection.endToStart:
-                0.4, // greater threshold for delete, avoid accidental delete
-            DismissDirection.startToEnd: 0.2, // smaller threshold for update
-          },
-          key: ValueKey(expenses[index]),
-          background: background,
-          secondaryBackground: secondaryBackground,
-          confirmDismiss: (direction) {
-            if (direction == DismissDirection.endToStart) {
-              // delete -> dismiss
-              return Future(() => true);
-            } else {
-              // update -> request update and do NOT dismiss
-              onUpdateExpense(expenseToUpdate: expenses[index]);
-              return Future(() => false);
-            }
-          },
-          onDismissed: (direction) {
-            if (direction == DismissDirection.endToStart) {
-              onRemoveExpense(expenses[index]);
-            } else {
-              // will never be called, dismiss rejected, see `confirmDismiss` above
-            }
-          },
-          child: ExpenseItem(expense: expenses[index]),
+        var expenseItem = ExpenseItem(expense: expenses[index]);
+        return Stack(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                DismissableCardBackground(
+                  // Edit background
+                  backgroundColor:
+                      Theme.of(context).colorScheme.primary.withOpacity(0.75),
+                  icon: Icons.draw,
+                  iconAlignment: Alignment.centerLeft,
+                  height: 82,
+                ),
+                DismissableCardBackground(
+                  // Delete background
+                  backgroundColor:
+                      Theme.of(context).colorScheme.error.withOpacity(0.75),
+                  icon: Icons.delete,
+                  iconAlignment: Alignment.centerRight,
+                  height: 82,
+                )
+              ],
+            ),
+            Dismissible(
+                key: ValueKey(expenses[index]),
+                confirmDismiss: (direction) {
+                  if (direction == DismissDirection.endToStart) {
+                    // delete -> dismiss
+                    return Future(() => true);
+                  } else {
+                    // update -> request update and do NOT dismiss
+                    onUpdateExpense(expenseToUpdate: expenses[index]);
+                    return Future(() => false);
+                  }
+                },
+                onDismissed: (direction) {
+                  if (direction == DismissDirection.endToStart) {
+                    onRemoveExpense(expenses[index]);
+                  } else {
+                    // will never be called, dismiss rejected, see `confirmDismiss` above
+                  }
+                },
+                dismissThresholds: const {
+                  DismissDirection.endToStart:
+                      0.4, // greater threshold for delete, avoid accidental delete
+                  DismissDirection.startToEnd:
+                      0.2, // smaller threshold for update
+                },
+                child: expenseItem),
+          ],
         );
       },
+    );
+  }
+}
+
+/// A background for a dismissable card.
+/// It is better than the default background because it is not clipped.
+/// [icon] is the icon to be displayed.
+/// [backgroundColor] is the background color.
+/// [iconAlignment] is the alignment of the icon.
+/// [height] is the height of the background.
+class DismissableCardBackground extends StatelessWidget {
+  const DismissableCardBackground(
+      {super.key,
+      required this.icon,
+      required this.backgroundColor,
+      required this.iconAlignment,
+      required this.height});
+  final IconData icon;
+  final Color backgroundColor;
+  final Alignment iconAlignment;
+  final double height;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Card(
+        color: backgroundColor,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          height: height,
+          alignment: iconAlignment,
+          child: Icon(icon),
+        ),
+      ),
     );
   }
 }
