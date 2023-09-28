@@ -40,3 +40,6 @@ User Interface:
 `ExpensesList` is a list of dismissible items, each one is an `ExpenseItem`, defined in `expense_item.dart`.  
 `ExpenseScreen` is also responsible for showing a modal bottom sheet, which displays a widget defined in` new_expense.dart`.
 In the models folder, there is `expense.dart` which contains the `Expense` class and `ExpenseBucket` class (needed for charts).
+
+## Class diagram
+![class diagram](./documents/umldiagram.png)
