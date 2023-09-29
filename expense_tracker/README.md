@@ -43,3 +43,6 @@ In the models folder, there is `expense.dart` which contains the `Expense` class
 
 ## Class diagram
 ![class diagram](./documents/umldiagram.png)
+
+## Feedback to other student
+I've given a code review with feedback to one other student. It can be found in this [pull request](https://github.com/Oransj/Expense-tracker-project/pull/1), comments in a more readable form can be found [here](https://github.com/Oransj/Expense-tracker-project/pull/1/commits/cdfffa27ce896b7db9b9a16eea8858951ee35003).
