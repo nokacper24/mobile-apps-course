@@ -45,4 +45,7 @@ In the models folder, there is `expense.dart` which contains the `Expense` class
 ![class diagram](./documents/umldiagram.png)
 
 ## Feedback to other student
-I've given a code review with feedback to one other student. It can be found in this [pull request](https://github.com/Oransj/Expense-tracker-project/pull/1), comments in a more readable form can be found [here](https://github.com/Oransj/Expense-tracker-project/pull/1/commits/cdfffa27ce896b7db9b9a16eea8858951ee35003).
+I've done a code review with feedback to one other student. It can be found in this [pull request](https://github.com/Oransj/Expense-tracker-project/pull/1), comments in a more readable form can be found [here](https://github.com/Oransj/Expense-tracker-project/pull/1/commits/cdfffa27ce896b7db9b9a16eea8858951ee35003).  
+I've helped the other  student by providing feedback on their work. I also get feedback.  
+We have discussed the project during the development process and that led to me fixing the backgrounds of the dismissible items. In my applicaton these are not Card widgtes, instead they are simple containers with rounded borders. Background to the dismissible items is the same, thus it appears nice and flush with the "item". This way there is no weird looking margin between the item and the background of the dismissible item. This can be observed in the image below.  
+![cropped out image of the dismissible item being dismissed, background is visibly flush with the item](./documents/image.png)
