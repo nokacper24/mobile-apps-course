@@ -28,28 +28,34 @@ class MealDetailScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final bool isFavourite = ref.watch(favouritesProvider).contains(meal);
 
+    var headerStyle = Theme.of(context).textTheme.titleLarge!.copyWith(
+        color: Theme.of(context).colorScheme.primary,
+        fontWeight: FontWeight.bold);
+
+    var contentStyle = Theme.of(context)
+        .textTheme
+        .bodyMedium!
+        .copyWith(color: Theme.of(context).colorScheme.onBackground);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(meal.title),
         actions: [
           IconButton(
-            icon: AnimatedSwitcher(
-              duration: const Duration(milliseconds: 300),
-              transitionBuilder: (child, animation) {
-                return RotationTransition(
-                  turns: Tween(begin: 0.5, end: 1.0).animate(animation),
-                  child: child,
-                );
-              },
-              child: Icon(
-                isFavourite ? Icons.star : Icons.star_border,
-                key: ValueKey(isFavourite),
-              ),
-            ),
-            onPressed: () {
-              showSnackBar(ref, context);
-            },
-          )
+              icon: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  transitionBuilder: (child, animation) {
+                    return RotationTransition(
+                        turns: Tween(begin: 0.5, end: 1.0).animate(animation),
+                        child: child);
+                  },
+                  child: Icon(
+                    isFavourite ? Icons.star : Icons.star_border,
+                    key: ValueKey(isFavourite),
+                  )),
+              onPressed: () {
+                showSnackBar(ref, context);
+              })
         ],
       ),
       body: SingleChildScrollView(
@@ -66,39 +72,22 @@ class MealDetailScreen extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 14),
-            Text(
-              'Ingredients',
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.bold),
-            ),
+            Text('Ingredients', style: headerStyle),
             const SizedBox(height: 14),
-            ...meal.ingredients
-                .map((ingredient) => Text(
-                      ingredient,
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: Theme.of(context).colorScheme.onBackground),
-                    ))
-                .toList(),
+            ...meal.ingredients.map((ingredient) {
+              return Text(ingredient, style: contentStyle);
+            }).toList(),
             const SizedBox(height: 14),
-            Text(
-              'Steps',
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.bold),
-            ),
+            Text('Steps', style: headerStyle),
             const SizedBox(height: 14),
             ...meal.steps
-                .map((step) => Padding(
+                .map(
+                  (step) => Padding(
                       padding: const EdgeInsets.symmetric(
                           horizontal: 12, vertical: 8),
-                      child: Text(
-                        step,
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: Theme.of(context).colorScheme.onBackground),
-                      ),
-                    ))
+                      child: Text(step,
+                          textAlign: TextAlign.center, style: contentStyle)),
+                )
                 .toList(),
           ],
         ),
