@@ -7,102 +7,72 @@ class FiltersScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final activeFilters = ref.watch(filtersProvider);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Filters'),
       ),
-      body: Column(
+      body: const Column(
         children: [
-          SwitchListTile(
-            title: Text(
-              'Gluten-free',
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
-                  ),
-            ),
-            subtitle: Text(
-              'Only ibnclude gluten-free meals.',
-              style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
-                  ),
-            ),
-            activeColor: Theme.of(context).colorScheme.tertiary,
-            contentPadding: const EdgeInsets.only(left: 32, right: 22),
-            value: activeFilters[Filter.glutenFree]!,
-            onChanged: (value) {
-              ref
-                  .read(filtersProvider.notifier)
-                  .setFilter(Filter.glutenFree, value);
-            },
+          FilterSwitchListTile(
+            title: 'Gluten-free',
+            subtitle: 'Only include gluten-free meals.',
+            filter: Filter.glutenFree,
           ),
-          SwitchListTile(
-            title: Text(
-              'Lactose-free',
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
-                  ),
-            ),
-            subtitle: Text(
-              'Only ibnclude lactose-free meals.',
-              style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
-                  ),
-            ),
-            activeColor: Theme.of(context).colorScheme.tertiary,
-            contentPadding: const EdgeInsets.only(left: 32, right: 22),
-            value: activeFilters[Filter.lactoseFree]!,
-            onChanged: (value) {
-              ref
-                  .read(filtersProvider.notifier)
-                  .setFilter(Filter.lactoseFree, value);
-            },
+          FilterSwitchListTile(
+            title: 'Lactose-free',
+            subtitle: 'Only include lactose-free meals.',
+            filter: Filter.lactoseFree,
           ),
-          SwitchListTile(
-            title: Text(
-              'Vegetarian',
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
-                  ),
-            ),
-            subtitle: Text(
-              'Only ibnclude vegetarian meals.',
-              style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
-                  ),
-            ),
-            activeColor: Theme.of(context).colorScheme.tertiary,
-            contentPadding: const EdgeInsets.only(left: 32, right: 22),
-            value: activeFilters[Filter.vegetarian]!,
-            onChanged: (value) {
-              ref
-                  .read(filtersProvider.notifier)
-                  .setFilter(Filter.vegetarian, value);
-            },
+          FilterSwitchListTile(
+            title: 'Vegetarian',
+            subtitle: 'Only include vegetarian meals.',
+            filter: Filter.vegetarian,
           ),
-          SwitchListTile(
-            title: Text(
-              'Vegan',
-              style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
-                  ),
-            ),
-            subtitle: Text(
-              'Only ibnclude vegan meals.',
-              style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                    color: Theme.of(context).colorScheme.onBackground,
-                  ),
-            ),
-            activeColor: Theme.of(context).colorScheme.tertiary,
-            contentPadding: const EdgeInsets.only(left: 32, right: 22),
-            value: activeFilters[Filter.vegan]!,
-            onChanged: (value) {
-              ref.read(filtersProvider.notifier).setFilter(Filter.vegan, value);
-            },
+          FilterSwitchListTile(
+            title: 'Vegan',
+            subtitle: 'Only include vegan meals.',
+            filter: Filter.vegan,
           ),
         ],
       ),
+    );
+  }
+}
+
+class FilterSwitchListTile extends ConsumerWidget {
+  final String title;
+  final String subtitle;
+  final Filter filter;
+
+  const FilterSwitchListTile({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    required this.filter,
+  });
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    var activeFilters = ref.watch(filtersProvider);
+    return SwitchListTile(
+      title: Text(
+        title,
+        style: Theme.of(context).textTheme.titleLarge!.copyWith(
+              color: Theme.of(context).colorScheme.onBackground,
+            ),
+      ),
+      subtitle: Text(
+        subtitle,
+        style: Theme.of(context).textTheme.labelMedium!.copyWith(
+              color: Theme.of(context).colorScheme.onBackground,
+            ),
+      ),
+      activeColor: Theme.of(context).colorScheme.tertiary,
+      contentPadding: const EdgeInsets.only(left: 32, right: 22),
+      value: activeFilters[filter]!,
+      onChanged: (value) {
+        ref.read(filtersProvider.notifier).setFilter(filter, value);
+      },
     );
   }
 }
