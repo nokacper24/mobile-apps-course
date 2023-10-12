@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:meals/screens/tabs.dart';
 
@@ -17,9 +18,10 @@ class MealsApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return ProviderScope(
+        child: MaterialApp(
       theme: theme,
       home: const TabsScreen(),
-    );
+    ));
   }
 }
