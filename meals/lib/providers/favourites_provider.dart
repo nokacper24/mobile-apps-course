@@ -12,13 +12,11 @@ class FavouritesNotifier extends StateNotifier<List<Meal>> {
     } else {
       state = [...state, meal];
     }
-    return removed;
+    return !removed;
   }
 }
 
 final favouritesProvider =
-    StateNotifierProvider<FavouritesNotifier, List<Meal>>(
-  (ref) {
-    return FavouritesNotifier();
-  },
-);
+    StateNotifierProvider<FavouritesNotifier, List<Meal>>((ref) {
+  return FavouritesNotifier();
+});

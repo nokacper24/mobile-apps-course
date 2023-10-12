@@ -11,29 +11,31 @@ class MealDetailScreen extends ConsumerWidget {
   });
   final Meal meal;
 
-  void _showInfoMessage(BuildContext context,String message) {
+  void showSnackBar(WidgetRef ref, BuildContext context) {
+    final bool wasAdded =
+        ref.read(favouritesProvider.notifier).toggleMealFavouriteStatus(meal);
     ScaffoldMessenger.of(context).clearSnackBars();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         duration: const Duration(seconds: 1),
-        content: Text(message),
+        content: Text(
+            wasAdded ? 'Added to favourites!' : 'Removed from favourites.'),
       ),
     );
   }
 
-
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final bool isFavourite = ref.watch(favouritesProvider).contains(meal);
+
     return Scaffold(
       appBar: AppBar(
         title: Text(meal.title),
         actions: [
           IconButton(
-            icon: Icon(Icons.star),
+            icon: Icon(isFavourite ? Icons.star : Icons.star_border),
             onPressed: () {
-              ref
-                  .read(favouritesProvider.notifier)
-                  .toggleMealFavouriteStatus(meal);
+              showSnackBar(ref, context);
             },
           )
         ],
