@@ -75,6 +75,22 @@ class MainDrawer extends StatelessWidget {
               onSelectScreen('filters');
             },
           ),
+          ListTile(
+            leading: Icon(
+              Icons.check_box,
+              size: 26,
+              color: Theme.of(context).colorScheme.onBackground,
+            ),
+            title: Text(
+              'Completed',
+              style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                  color: Theme.of(context).colorScheme.onBackground,
+                  fontSize: 24),
+            ),
+            onTap: () {
+              onSelectScreen('completed');
+            },
+          ),
         ],
       ),
     );

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meals/providers/favourites_provider.dart';
 import 'package:meals/providers/filters_provider.dart';
 import 'package:meals/screens/categories_screen.dart';
+import 'package:meals/screens/completed_screen.dart';
 import 'package:meals/screens/filters_screen.dart';
 import 'package:meals/screens/meals_screen.dart';
 import 'package:meals/widgets/main_drawer.dart';
@@ -30,6 +31,10 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     if (identifier == 'filters') {
       Navigator.of(context).push<Map<Filter, bool>>(MaterialPageRoute(
         builder: (context) => const FiltersScreen(),
+      ));
+    } else if (identifier == 'completed') {
+      Navigator.of(context).push<Map<Filter, bool>>(MaterialPageRoute(
+        builder: (context) => const CompletedScreen(),
       ));
     }
   }
