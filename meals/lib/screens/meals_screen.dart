@@ -3,6 +3,7 @@ import 'package:meals/models/meal.dart';
 import 'package:meals/screens/meal_detail_screen.dart';
 import 'package:meals/widgets/meal_item.dart';
 
+/// A screen that displays a list of meals.
 class MealsScreen extends StatelessWidget {
   const MealsScreen(
       {super.key,

@@ -16,6 +16,7 @@ class FavouritesNotifier extends StateNotifier<List<Meal>> {
   }
 }
 
+/// A provider that exposes the list of favourite meals.
 final favouritesProvider =
     StateNotifierProvider<FavouritesNotifier, List<Meal>>((ref) {
   return FavouritesNotifier();

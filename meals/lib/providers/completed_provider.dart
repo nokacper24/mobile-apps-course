@@ -23,13 +23,14 @@ class CompletedNotifier extends StateNotifier<List<(Meal, Rating)>> {
     state = state.where((element) => element.$1.id != meal.id).toList();
   }
 }
-
+/// A provider that exposes the list of completed meals along with their ratings.
+/// Has a notifier that can be used to add and remove reviews.
 final completedProvider =
     StateNotifierProvider<CompletedNotifier, List<(Meal, Rating)>>((ref) {
   return CompletedNotifier();
 });
 
-
+/// A provider that exposes the list of completed meals.
 final completedMealsProvider = Provider<List<Meal>>((ref) {
   return ref.watch(completedProvider).map((e) => e.$1).toList();
 });

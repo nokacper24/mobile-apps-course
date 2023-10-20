@@ -4,6 +4,7 @@ import 'package:meals/models/meal.dart';
 import 'package:meals/providers/completed_provider.dart';
 import 'package:meals/screens/meal_detail_screen.dart';
 
+/// A screen that displays the meals that have been completed, along with their ratings.
 class CompletedScreen extends ConsumerWidget {
   const CompletedScreen({super.key});
 

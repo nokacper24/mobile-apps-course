@@ -8,6 +8,7 @@ import 'package:meals/screens/filters_screen.dart';
 import 'package:meals/screens/meals_screen.dart';
 import 'package:meals/widgets/main_drawer.dart';
 
+/// A widget that displays a tabbed layout for the Meals app.
 class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
 
@@ -20,12 +21,14 @@ class TabsScreen extends ConsumerStatefulWidget {
 class _TabsScreenState extends ConsumerState<TabsScreen> {
   int _selectedPageIndex = 0;
 
+  /// Changes the currently selected page to the one at the given [index].
   void _selectPage(int index) {
     setState(() {
       _selectedPageIndex = index;
     });
   }
 
+  /// Sets the screen to display based on the given [identifier].
   void _setScreen(String identifier) {
     Navigator.of(context).pop();
     if (identifier == 'filters') {

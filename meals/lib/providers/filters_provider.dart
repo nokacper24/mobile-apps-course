@@ -26,6 +26,8 @@ class FiltersNotifier extends StateNotifier<Map<Filter, bool>> {
   }
 }
 
+/// A provider that exposes the active filters.
+/// Has a notifier that can be used to set the filters.
 final filtersProvider =
     StateNotifierProvider<FiltersNotifier, Map<Filter, bool>>(
         (ref) => FiltersNotifier());

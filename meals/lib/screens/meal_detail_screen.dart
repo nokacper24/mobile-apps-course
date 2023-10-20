@@ -5,6 +5,7 @@ import 'package:meals/providers/completed_provider.dart';
 import 'package:meals/providers/favourites_provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
+/// A screen that displays the details of a meal.
 class MealDetailScreen extends ConsumerWidget {
   const MealDetailScreen({
     super.key,
@@ -110,6 +111,7 @@ class MealDetailScreen extends ConsumerWidget {
   }
 }
 
+/// A popup that allows the user to add a rating to a meal.
 class AddReviewPopup extends ConsumerWidget {
   const AddReviewPopup(this.meal, {super.key});
   final Meal meal;

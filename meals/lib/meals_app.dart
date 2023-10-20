@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:meals/screens/tabs.dart';
 
+/// The theme used throughout the app.
 final theme = ThemeData(
   useMaterial3: true,
   colorScheme: ColorScheme.fromSeed(
@@ -12,6 +13,7 @@ final theme = ThemeData(
   textTheme: GoogleFonts.latoTextTheme(),
 );
 
+/// The root widget of the Meals App.
 class MealsApp extends StatelessWidget {
   const MealsApp({super.key});
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meals/providers/filters_provider.dart';
 
+/// A screen that allows the user to set filters for the meals.
 class FiltersScreen extends ConsumerWidget {
   const FiltersScreen({super.key});
 
@@ -39,6 +40,7 @@ class FiltersScreen extends ConsumerWidget {
   }
 }
 
+/// A switch list tile that represents a filter that can be applied to meals.
 class FilterSwitchListTile extends ConsumerWidget {
   final String title;
   final String subtitle;

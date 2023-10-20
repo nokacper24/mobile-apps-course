@@ -5,6 +5,7 @@ import 'package:meals/screens/meals_screen.dart';
 import 'package:meals/widgets/category_grid_item.dart';
 import 'package:meals/data/dummy_data.dart';
 
+/// A screen that displays a grid of categories, each of which can be selected to view a list of meals in that category.
 class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({super.key, required this.availableMeals});
   final List<Meal> availableMeals;
@@ -36,6 +37,7 @@ class _CategoriesScreenState extends State<CategoriesScreen>
     super.dispose();
   }
 
+  /// Navigates to the [MealsScreen] for the given [category].
   void _selectCategory(BuildContext context, Category category) {
     List<Meal> meals = widget.availableMeals
         .where((meal) => meal.categories.contains(category.id))
