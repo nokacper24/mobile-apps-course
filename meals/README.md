@@ -30,7 +30,6 @@ User can view completed meals in the 'Completed' screen along with the rating gi
 ![completed meals](./documents/completed_meals.png)
 
 ## Collaboration with other student
-
 I have done a code review for the other student via a [pull request](https://github.com/Oransj/meals-app/pull/1). All comments can be more easily viewed [here](https://github.com/Oransj/meals-app/pull/1/commits/c1d58775860e0653be79e058225c98fb0841046f#diff-3371bc624820770aeaba082af5ecbe94b37bc0f7512e8ebc78627269eb155bc7). There was not much to comment on.  
 We have additionally worked together during the lab sessions, discussing the assignment and helping each other with problems.  
 
