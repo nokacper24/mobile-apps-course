@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meals/models/meal.dart';
-import 'package:meals/models/review.dart';
 import 'package:meals/providers/completed_provider.dart';
 import 'package:meals/screens/meal_detail_screen.dart';
 
@@ -17,7 +16,7 @@ class CompletedScreen extends ConsumerWidget {
             child: Column(
               children: [
                 ...mealsAndReviews
-                    .map((e) => MealReview(meal: e.$1, review: e.$2))
+                    .map((e) => MealReview(meal: e.$1, rating: e.$2))
                     .toList()
               ],
             ),
@@ -46,9 +45,9 @@ class CompletedScreen extends ConsumerWidget {
 }
 
 class MealReview extends ConsumerWidget {
-  const MealReview({super.key, required this.meal, required this.review});
+  const MealReview({super.key, required this.meal, required this.rating});
   final Meal meal;
-  final Review review;
+  final Rating rating;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -84,7 +83,7 @@ class MealReview extends ConsumerWidget {
                       Row(
                         children: [
                           Text(
-                            review.rating.str,
+                            rating.str,
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyLarge!
@@ -97,7 +96,7 @@ class MealReview extends ConsumerWidget {
                             width: 8,
                           ),
                           Icon(
-                            review.rating.icon,
+                            rating.icon,
                             color: Theme.of(context).colorScheme.onPrimary,
                           ),
                         ],
