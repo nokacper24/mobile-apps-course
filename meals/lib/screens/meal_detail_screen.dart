@@ -29,8 +29,6 @@ class MealDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bool isFavourite = ref.watch(favouritesProvider).contains(meal);
-    final bool isCompleted =
-        isMealCompleted(meal, ref.watch(completedProvider));
 
     var headerStyle = Theme.of(context).textTheme.titleLarge!.copyWith(
         color: Theme.of(context).colorScheme.primary,
@@ -146,7 +144,7 @@ class AddReviewPopup extends ConsumerWidget {
               }).toList(),
             ],
           ),
-          SizedBox(height: 14),
+          const SizedBox(height: 14),
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
