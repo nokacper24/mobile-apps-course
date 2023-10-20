@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:meals/models/meal.dart';
+import 'package:meals/models/review.dart';
+import 'package:meals/providers/completed_provider.dart';
 import 'package:meals/providers/favourites_provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -27,6 +29,8 @@ class MealDetailScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final bool isFavourite = ref.watch(favouritesProvider).contains(meal);
+    final bool isCompleted =
+        isMealCompleted(meal, ref.watch(completedProvider));
 
     var headerStyle = Theme.of(context).textTheme.titleLarge!.copyWith(
         color: Theme.of(context).colorScheme.primary,
@@ -89,8 +93,67 @@ class MealDetailScreen extends ConsumerWidget {
                           textAlign: TextAlign.center, style: contentStyle)),
                 )
                 .toList(),
+            const SizedBox(height: 14),
+            if (!isMealCompleted(meal, ref.watch(completedProvider)))
+              ElevatedButton(
+                child: const Text('Add a review'),
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => AddReviewPopup(meal),
+                  );
+                },
+              ),
+            const SizedBox(height: 100),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class AddReviewPopup extends ConsumerWidget {
+  const AddReviewPopup(this.meal, {super.key});
+  final Meal meal;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    return AlertDialog(
+      title: Text('Add a review',
+          style: Theme.of(context).textTheme.titleLarge!.copyWith(
+              color: Theme.of(context).colorScheme.onBackground,
+              fontWeight: FontWeight.bold)),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text('How was your meal?',
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyLarge!
+                  .copyWith(color: Theme.of(context).colorScheme.onBackground)),
+          const SizedBox(height: 14),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ...Rating.values.map((rating) {
+                return ElevatedButton(
+                    onPressed: () {
+                      ref.read(completedProvider.notifier).addReview(
+                          meal, Review(id: 'R${meal.id}', rating: rating));
+                      Navigator.of(context).pop();
+                    },
+                    child: Text(rating.str));
+              }).toList(),
+            ],
+          ),
+          SizedBox(height: 14),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Cancel'),
+          ),
+        ],
       ),
     );
   }
