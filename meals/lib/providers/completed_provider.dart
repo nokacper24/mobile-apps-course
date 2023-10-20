@@ -24,11 +24,12 @@ class CompletedNotifier extends StateNotifier<List<(Meal, Rating)>> {
   }
 }
 
-bool isMealCompleted(Meal meal, List<(Meal, Rating)> completedMeals) {
-  return completedMeals.any((element) => element.$1.id == meal.id);
-}
-
 final completedProvider =
     StateNotifierProvider<CompletedNotifier, List<(Meal, Rating)>>((ref) {
   return CompletedNotifier();
+});
+
+
+final completedMealsProvider = Provider<List<Meal>>((ref) {
+  return ref.watch(completedProvider).map((e) => e.$1).toList();
 });

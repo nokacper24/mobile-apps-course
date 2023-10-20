@@ -91,7 +91,8 @@ class MealDetailScreen extends ConsumerWidget {
                 )
                 .toList(),
             const SizedBox(height: 14),
-            if (!isMealCompleted(meal, ref.watch(completedProvider)))
+            // if meal is not completed yet
+            if (!ref.watch(completedMealsProvider).contains(meal))
               ElevatedButton(
                 child: const Text('Add a rating'),
                 onPressed: () {
