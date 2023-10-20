@@ -1,16 +1,4 @@
 # meals
+Simple meals app. This project is assignment 2 in [IDATA2503 - Mobile applications](https://www.ntnu.edu/studies/courses/IDATA2503) course at NTNU. Below is the documentation required for the assignment.  
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+![class diagram](./documents/classdiagram.svg)
