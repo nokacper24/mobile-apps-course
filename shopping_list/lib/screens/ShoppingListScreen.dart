@@ -11,10 +11,11 @@ class ShoppingListScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Your Groceries'),
       ),
-      body: ListView(
-        children: groceryItems
-            .map((item) => GroceryItemRow(groceryItem: item))
-            .toList(),
+      body: ListView.builder(
+        itemCount: groceryItems.length,
+        itemBuilder: (context, index) {
+          return GroceryItemRow(groceryItem: groceryItems[index]);
+        },
       ),
     );
   }
