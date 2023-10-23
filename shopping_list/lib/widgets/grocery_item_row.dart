@@ -9,9 +9,10 @@ class GroceryItemRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       title: Text(groceryItem.name),
-      leading: Icon(Icons.square),
+      leading: const Icon(Icons.square),
       iconColor: groceryItem.category.color,
       trailing: Text(groceryItem.quantity.toString()),
+      leadingAndTrailingTextStyle: Theme.of(context).textTheme.bodyMedium,
     );
   }
 }
