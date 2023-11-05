@@ -3,13 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shopping_list/data/categories.dart';
-
-import 'package:shopping_list/models/category.dart';
 import 'package:shopping_list/models/grocery_item.dart';
 import 'package:shopping_list/screens/new_item_screen.dart';
 import 'package:shopping_list/widgets/grocery_item_row.dart';
 
-const kAPIurl = ;
+const kAPIurl =;
 
 class ShoppingListScreen extends StatefulWidget {
   const ShoppingListScreen({super.key});
@@ -20,11 +18,25 @@ class ShoppingListScreen extends StatefulWidget {
 
 class _ShoppingListScreenState extends State<ShoppingListScreen> {
   List<GroceryItem> _grocryItems = [];
+  bool isLoading = true;
+
+  void _setLoading(bool value) {
+    setState(() {
+      isLoading = value;
+    });
+  }
 
   void _loadItems() async {
+    _setLoading(true);
     final url = Uri.https(kAPIurl, 'shopping-list.json');
     final response = await http.get(url);
+
     final List<GroceryItem> loadedItemsList = [];
+
+    if (response.body == 'null') {
+      _setLoading(false);
+      return;
+    }
     final Map<String, dynamic> responseData = json.decode(response.body);
 
     for (final item in responseData.entries) {
@@ -47,6 +59,7 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
     setState(() {
       _grocryItems = loadedItemsList;
     });
+    _setLoading(false);
   }
 
   @override
@@ -56,20 +69,19 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
   }
 
   void _addItem() async {
-    // final GroceryItem? newItem =
-    //     await Navigator.of(context).push<GroceryItem>(MaterialPageRoute(
-    //   builder: (context) => const NewItemScreen(),
-    // ));
-    // if (newItem != null) {
-    //   setState(() {
-    //     _grocryItems.add(newItem);
-    //   });
-    // }
-    await Navigator.of(context).push(MaterialPageRoute(
+    final GroceryItem? newItem =
+        await Navigator.of(context).push<GroceryItem>(MaterialPageRoute(
       builder: (context) => const NewItemScreen(),
     ));
-
-    _loadItems();
+    if (newItem != null) {
+      setState(() {
+        _grocryItems.add(newItem);
+      });
+    }
+    // await Navigator.of(context).push(MaterialPageRoute(
+    //   builder: (context) => const NewItemScreen(),
+    // ));
+    // _loadItems();
   }
 
   void _deleteItem(GroceryItem groceryItem) async {
@@ -78,7 +90,11 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
     // });
     final url = Uri.https(kAPIurl, 'shopping-list/${groceryItem.id}.json');
     await http.delete(url);
-    _loadItems();
+
+    setState(() {
+      _grocryItems.remove(groceryItem);
+    });
+    // _loadItems();
   }
 
   @override
@@ -100,6 +116,12 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
     } else {
       content = const Center(
         child: Text('You\'ve got no items yet.'),
+      );
+    }
+
+    if (isLoading) {
+      content = const Center(
+        child: CircularProgressIndicator(),
       );
     }
 

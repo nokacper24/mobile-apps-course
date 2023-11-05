@@ -42,18 +42,19 @@ class _NewItemScreenState extends State<NewItemScreen> {
             'quantity': _enteredQuantity,
             'category': _selectedCategory.title,
           }));
+      final String returnedId = json.decode(response.body)['name'];
 
       if (!context.mounted) {
         // If the widget was removed from the tree during async call
         return;
       }
-      Navigator.of(context).pop();
+      // Navigator.of(context).pop();
 
-      // Navigator.of(context).pop(GroceryItem(
-      //     id: DateTime.now().toString(),
-      //     name: _enteredName,
-      //     quantity: _enteredQuantity,
-      //     category: _selectedCategory));
+      Navigator.of(context).pop(GroceryItem(
+          id: returnedId,
+          name: _enteredName,
+          quantity: _enteredQuantity,
+          category: _selectedCategory));
     }
   }
 
