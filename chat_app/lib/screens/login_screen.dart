@@ -1,4 +1,10 @@
+import 'dart:io';
+
+import 'package:chat_app/widgets/user_image_picker.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+final _firebase = FirebaseAuth.instance;
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,13 +20,44 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   String _enteredEmail = '';
   String _enteredPassword = '';
+  File? _selectedImage;
 
-  _submit() {
+  _submit() async {
     final bool isValid = _formKey.currentState!.validate();
-    if (isValid) {
-      _formKey.currentState!.save();
-      print(_enteredEmail);
-      print(_enteredPassword);
+    if (!isValid) {
+      return;
+    }
+    if (!_isLogin && _selectedImage == null) {
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Please pick an image.'),
+        ),
+      );
+      return;
+    }
+    _formKey.currentState!.save();
+    try {
+      if (_isLogin) {
+        final credentials = await _firebase.signInWithEmailAndPassword(
+            email: _enteredEmail, password: _enteredPassword);
+      } else {
+        final credentials = await _firebase.createUserWithEmailAndPassword(
+            email: _enteredEmail, password: _enteredPassword);
+      }
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'email-aready-in-use') {
+        //
+      }
+      if (!context.mounted) {
+        return;
+      }
+      ScaffoldMessenger.of(context).clearSnackBars();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(e.message ?? 'Authentication failed'),
+        ),
+      );
     }
   }
 
@@ -48,6 +85,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     child: Column(
                       // mainAxisSize: MainAxisSize.min,
                       children: [
+                        if (!_isLogin)
+                          UserImagePicker(
+                            onPickImage: (pickedImage) {
+                              _selectedImage = pickedImage;
+                            },
+                          ),
                         TextFormField(
                           decoration: const InputDecoration(labelText: 'Email'),
                           keyboardType: TextInputType.emailAddress,
