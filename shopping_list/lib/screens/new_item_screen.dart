@@ -17,6 +17,7 @@ class NewItemScreen extends StatefulWidget {
 }
 
 class _NewItemScreenState extends State<NewItemScreen> {
+  bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
   String _enteredName = '';
   int _enteredQuantity = 1;
@@ -31,6 +32,9 @@ class _NewItemScreenState extends State<NewItemScreen> {
   void _saveItem() async {
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
+      setState(() {
+        _isLoading = true;
+      });
 
       final url = Uri.https(kAPIurl, 'shopping-list.json');
       final response = await http.post(url,
@@ -141,11 +145,21 @@ class _NewItemScreenState extends State<NewItemScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  TextButton(onPressed: _resetForm, child: const Text('Reset')),
+                  TextButton(
+                    onPressed: _isLoading ? null : _resetForm,
+                    child: const Text('Reset'),
+                  ),
                   ElevatedButton(
-                      onPressed: _saveItem, child: const Text('Add Item')),
+                    onPressed: _isLoading ? null : _saveItem,
+                    child: _isLoading
+                        ? const SizedBox(
+                            height: 16,
+                            width: 16,
+                            child: CircularProgressIndicator())
+                        : const Text('Add Item'),
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),

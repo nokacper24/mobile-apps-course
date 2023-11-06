@@ -7,7 +7,7 @@ import 'package:shopping_list/models/grocery_item.dart';
 import 'package:shopping_list/screens/new_item_screen.dart';
 import 'package:shopping_list/widgets/grocery_item_row.dart';
 
-const kAPIurl =;
+const kAPIurl =
 
 class ShoppingListScreen extends StatefulWidget {
   const ShoppingListScreen({super.key});
@@ -18,11 +18,12 @@ class ShoppingListScreen extends StatefulWidget {
 
 class _ShoppingListScreenState extends State<ShoppingListScreen> {
   List<GroceryItem> _grocryItems = [];
-  bool isLoading = true;
+  bool _isLoading = true;
+  String? _error;
 
   void _setLoading(bool value) {
     setState(() {
-      isLoading = value;
+      _isLoading = value;
     });
   }
 
@@ -30,6 +31,14 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
     _setLoading(true);
     final url = Uri.https(kAPIurl, 'shopping-list.json');
     final response = await http.get(url);
+
+    if (response.statusCode >= 400) {
+      _setLoading(false);
+      setState(() {
+        _error = 'Error loading data';
+      });
+      return;
+    }
 
     final List<GroceryItem> loadedItemsList = [];
 
@@ -119,9 +128,15 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
       );
     }
 
-    if (isLoading) {
+    if (_isLoading) {
       content = const Center(
         child: CircularProgressIndicator(),
+      );
+    }
+
+    if (_error != null) {
+      content = Center(
+        child: Text(_error!),
       );
     }
 
