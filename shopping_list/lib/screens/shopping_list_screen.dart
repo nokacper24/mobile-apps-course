@@ -7,7 +7,7 @@ import 'package:shopping_list/models/grocery_item.dart';
 import 'package:shopping_list/screens/new_item_screen.dart';
 import 'package:shopping_list/widgets/grocery_item_row.dart';
 
-const kAPIurl =
+const kAPIurl = '';
 
 class ShoppingListScreen extends StatefulWidget {
   const ShoppingListScreen({super.key});
@@ -30,45 +30,53 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
   void _loadItems() async {
     _setLoading(true);
     final url = Uri.https(kAPIurl, 'shopping-list.json');
-    final response = await http.get(url);
+    try {
+      final response = await http.get(url);
 
-    if (response.statusCode >= 400) {
+      if (response.statusCode >= 400) {
+        _setLoading(false);
+        setState(() {
+          _error = 'Error loading data';
+        });
+        return;
+      }
+
+      final List<GroceryItem> loadedItemsList = [];
+
+      if (response.body == 'null') {
+        _setLoading(false);
+        return;
+      }
+      final Map<String, dynamic> responseData = json.decode(response.body);
+
+      for (final item in responseData.entries) {
+        final category = categories.entries
+            .firstWhere(
+              (element) => element.value.title == item.value['category'],
+            )
+            .value;
+
+        loadedItemsList.add(
+          GroceryItem(
+            id: item.key,
+            name: item.value['name'],
+            quantity: item.value['quantity'],
+            category: category,
+          ),
+        );
+      }
+
+      setState(() {
+        _grocryItems = loadedItemsList;
+      });
+      _setLoading(false);
+    } catch (error) {
       _setLoading(false);
       setState(() {
-        _error = 'Error loading data';
+        _error = 'Something went wrong.';
       });
       return;
     }
-
-    final List<GroceryItem> loadedItemsList = [];
-
-    if (response.body == 'null') {
-      _setLoading(false);
-      return;
-    }
-    final Map<String, dynamic> responseData = json.decode(response.body);
-
-    for (final item in responseData.entries) {
-      final category = categories.entries
-          .firstWhere(
-            (element) => element.value.title == item.value['category'],
-          )
-          .value;
-
-      loadedItemsList.add(
-        GroceryItem(
-          id: item.key,
-          name: item.value['name'],
-          quantity: item.value['quantity'],
-          category: category,
-        ),
-      );
-    }
-
-    setState(() {
-      _grocryItems = loadedItemsList;
-    });
-    _setLoading(false);
   }
 
   @override
@@ -94,15 +102,28 @@ class _ShoppingListScreenState extends State<ShoppingListScreen> {
   }
 
   void _deleteItem(GroceryItem groceryItem) async {
-    // setState(() {
-    //   _grocryItems.remove(groceryItem);
-    // });
-    final url = Uri.https(kAPIurl, 'shopping-list/${groceryItem.id}.json');
-    await http.delete(url);
+    final index = _grocryItems.indexOf(groceryItem);
 
     setState(() {
       _grocryItems.remove(groceryItem);
     });
+
+    final url = Uri.https(kAPIurl, 'shopping-list/${groceryItem.id}.json');
+    final response = await http.delete(url);
+
+    if (response.statusCode >= 400) {
+      setState(() {
+        _grocryItems.insert(index, groceryItem);
+      });
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Deleting item failed.'),
+          ),
+        );
+      }
+    }
+
     // _loadItems();
   }
 
